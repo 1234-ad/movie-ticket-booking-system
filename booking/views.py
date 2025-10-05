@@ -12,6 +12,10 @@ from .serializers import (
     UserRegistrationSerializer, UserLoginSerializer, MovieSerializer,
     ShowSerializer, BookingSerializer, BookingCreateSerializer, BookingDetailSerializer
 )
+from .email_service import EmailService
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class UserRegistrationView(generics.CreateAPIView):
@@ -158,6 +162,13 @@ def book_seat_view(request, show_id):
                     status='booked'
                 )
                 
+                # Send booking confirmation email
+                try:
+                    EmailService.send_booking_confirmation(booking)
+                    logger.info(f"Confirmation email sent for booking {booking.id}")
+                except Exception as e:
+                    logger.error(f"Failed to send confirmation email for booking {booking.id}: {str(e)}")
+                
                 response_serializer = BookingDetailSerializer(booking)
                 return Response({
                     'message': 'Seat booked successfully',
@@ -206,6 +217,13 @@ def cancel_booking_view(request, booking_id):
     # Cancel the booking
     booking.status = 'cancelled'
     booking.save()
+    
+    # Send cancellation email
+    try:
+        EmailService.send_cancellation_notification(booking)
+        logger.info(f"Cancellation email sent for booking {booking.id}")
+    except Exception as e:
+        logger.error(f"Failed to send cancellation email for booking {booking.id}: {str(e)}")
     
     return Response({
         'message': 'Booking cancelled successfully',

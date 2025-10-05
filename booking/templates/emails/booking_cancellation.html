@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Booking Cancelled</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #dc3545; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f8f9fa; }
+        .booking-details { background-color: white; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .highlight { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎫 Booking Cancelled</h1>
+        </div>
+        
+        <div class="content">
+            <p>Dear {{ user.first_name|default:user.username }},</p>
+            
+            <p>Your movie ticket booking has been cancelled. Here are the details of your cancelled booking:</p>
+            
+            <div class="booking-details">
+                <h3>Cancelled Booking Details</h3>
+                <p><strong>Movie:</strong> <span class="highlight">{{ movie.title }}</span></p>
+                <p><strong>Screen:</strong> {{ show.screen_name }}</p>
+                <p><strong>Date & Time:</strong> {{ show.date_time|date:"F d, Y" }} at {{ show.date_time|time:"g:i A" }}</p>
+                <p><strong>Seat Number:</strong> {{ booking.seat_number }}</p>
+                <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
+                <p><strong>Cancelled On:</strong> {{ booking.updated_at|date:"F d, Y" }} at {{ booking.updated_at|time:"g:i A" }}</p>
+            </div>
+            
+            <p><strong>What's Next:</strong></p>
+            <ul>
+                <li>Your seat is now available for other customers</li>
+                <li>If applicable, refunds will be processed within 3-5 business days</li>
+                <li>You can book tickets for other shows anytime</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>We're sorry to see you cancel your booking.</p>
+            <p>We hope to serve you again soon!</p>
+            <p>For any queries, please contact our support team.</p>
+        </div>
+    </div>
+</body>
+</html>
